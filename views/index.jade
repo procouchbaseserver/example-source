@@ -1,0 +1,54 @@
+extends layout
+
+block body
+	nav.navbar.navbar-default(role='navigation')
+	
+		.navbar-header
+		button.navbar-toggle(type='button', data-toggle='collapse', data-target='#bs-example-navbar-collapse-1')
+			span.sr-only Toggle navigation
+			span.icon-bar
+			span.icon-bar
+			span.icon-bar
+		a.navbar-brand(href='#') RanteR
+		#bs-example-navbar-collapse-1.collapse.navbar-collapse
+			ul.nav.navbar-nav
+				li.active
+					a(href='#') Link
+				li
+					a(href='#') Link
+				li.dropdown
+					a.dropdown-toggle(href='#', data-toggle='dropdown')
+						| Dropdown
+						b.caret
+				ul.dropdown-menu
+					li
+						a(href='#') Action
+					li
+						a(href='#') Another action
+					li
+						a(href='#') Something else here
+					li.divider
+					li
+						a(href='#') Separated link
+					li.divider
+					li
+						a(href='#') One more separated link
+			div(ng-show='!rootModel.loginData.isLoggedIn')
+				form.navbar-form.navbar-right(role='form')
+					.form-group
+						label.sr-only(for='exampleInputUsername') Email address
+						input#exampleInputUsername.form-control(type='username', placeholder='Enter Username', ng-model='model.username')
+					.form-group
+						label.sr-only(for='exampleInputPassword2') Password
+						input#exampleInputPassword2.form-control(type='password', placeholder='Password', ng-model='model.password')
+					.checkbox
+						label
+							input(type='checkbox')
+							| Remember me
+						button.btn.btn-default(type='submit',ng-click='events.login()') Sign in
+			div(ng-show='rootModel.loginData.isLoggedIn')
+				label.nav.navbar-nav.navbar-right(ng-bind='rootModel.loginData.name')
+
+
+	p(class='well') RanteR, is an anti-sochial network. We got no time for you, so just go.
+	ng-view
