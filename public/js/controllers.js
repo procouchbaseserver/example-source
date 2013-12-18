@@ -3,7 +3,7 @@
 /* Controllers */
 
 angular.module('ranter.controllers', ['ranter.services']).
-  controller('AppCtrl', function ($scope, $http) {
+  controller('AppCtrl', function ($scope, $http, $location) {
 
     $http({
       method: 'GET',
@@ -11,18 +11,21 @@ angular.module('ranter.controllers', ['ranter.services']).
     }).
     success(function (data, status, headers, config) {
       $scope.name = data.name;
+      
     }).
     error(function (data, status, headers, config) {
       $scope.name = 'Error!'
     });
 
   }).
-  controller('rootController', function ($scope, $rootScope, loginService) {
+  controller('rootController', function ($scope, $rootScope, $location, loginService) {
     $scope.events = {login: function(){
         loginService.login($scope.model.username, $scope.model.password)
           .success(function(result){
             $rootScope.rootModel = {};
             $rootScope.rootModel.loginData = result;
+
+            $location.path('/wall');
           })
           .error(function(data, status){
 
