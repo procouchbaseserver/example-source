@@ -21,6 +21,7 @@ exports.init = function(app){
 						name: result.value.username
 						};	
 
+				req.session.userData = data;
 				res.json(data);
 			}
 					
