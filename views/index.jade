@@ -11,28 +11,29 @@ block body
 			span.icon-bar
 		a.navbar-brand(href='#') RanteR
 		#bs-example-navbar-collapse-1.collapse.navbar-collapse
-			ul.nav.navbar-nav
-				li.active
-					a(href='#') Link
-				li
-					a(href='#') Link
-				li.dropdown
-					a.dropdown-toggle(href='#', data-toggle='dropdown')
-						| Dropdown
-						b.caret
-				ul.dropdown-menu
+			div(ng-show='rootModel.loginData.isLoggedIn')
+				ul.nav.navbar-nav
+					li.active
+						a(href='./Wall') Wall
 					li
-						a(href='#') Action
-					li
-						a(href='#') Another action
-					li
-						a(href='#') Something else here
-					li.divider
-					li
-						a(href='#') Separated link
-					li.divider
-					li
-						a(href='#') One more separated link
+						a(href='./timeline') Time-line
+				//- li.dropdown
+				//- 	a.dropdown-toggle(href='#', data-toggle='dropdown')
+				//- 		| Dropdown
+				//- 		b.caret
+				//- ul.dropdown-menu
+				//- 	li
+				//- 		a(href='#') Action
+				//- 	li
+				//- 		a(href='#') Another action
+				//- 	li
+				//- 		a(href='#') Something else here
+				//- 	li.divider
+				//- 	li
+				//- 		a(href='#') Separated link
+				//- 	li.divider
+				//- 	li
+				//- 		a(href='#') One more separated link
 			div(ng-show='!rootModel.loginData.isLoggedIn')
 				form.navbar-form.navbar-right(role='form')
 					.form-group
@@ -49,6 +50,4 @@ block body
 			div(ng-show='rootModel.loginData.isLoggedIn')
 				label.nav.navbar-nav.navbar-right(ng-bind='rootModel.loginData.name')
 
-
-	p(class='well') RanteR, is an anti-sochial network. We got no time for you, so just go.
 	ng-view
