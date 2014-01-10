@@ -16,6 +16,7 @@ exports.init = function(app){
 				res.writeHead(401);
 				res.end();
 			}else{	
+				console.log(JSON.stringify(result));
 				data = {
 						isLoggedIn: true,
 						name: result.value.username
@@ -28,4 +29,5 @@ exports.init = function(app){
 		});
 		
 	});
+
 };

@@ -18,6 +18,10 @@ config(function ($routeProvider, $locationProvider) {
       templateUrl: 'partials/wall',
       controller: 'WallController'
     }).
+    when('/timeline', {
+      templateUrl: 'partials/timeline',
+      controller: 'WallController'
+    }).
     when('/404', {
       templateUrl: 'partials/404'
     }).

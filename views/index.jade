@@ -14,26 +14,9 @@ block body
 			div(ng-show='rootModel.loginData.isLoggedIn')
 				ul.nav.navbar-nav
 					li.active
-						a(href='./Wall') Wall
+						a(href='#/wall') Wall
 					li
-						a(href='./timeline') Time-line
-				//- li.dropdown
-				//- 	a.dropdown-toggle(href='#', data-toggle='dropdown')
-				//- 		| Dropdown
-				//- 		b.caret
-				//- ul.dropdown-menu
-				//- 	li
-				//- 		a(href='#') Action
-				//- 	li
-				//- 		a(href='#') Another action
-				//- 	li
-				//- 		a(href='#') Something else here
-				//- 	li.divider
-				//- 	li
-				//- 		a(href='#') Separated link
-				//- 	li.divider
-				//- 	li
-				//- 		a(href='#') One more separated link
+						a(href='#/timeline') Time-line
 			div(ng-show='!rootModel.loginData.isLoggedIn')
 				form.navbar-form.navbar-right(role='form')
 					.form-group
