@@ -1,0 +1,32 @@
+#myTabContent.tab-content
+	#login.tab-pane.active.in
+	form.form-horizontal(action='', method='POST')
+	fieldset
+		.control-group
+			label.control-label(for='username') Username
+			.controls
+			input#username.input-xlarge(type='text', name='username', placeholder='', ng-model='model.username')
+		.control-group
+			label.control-label(for='description') Short Description
+			.controls
+			textarea#description.input-xlarge(name='description', rows='3', placeholder='', ng-model='model.description')
+		.control-group
+			label.control-label(for='image') Image URI
+			.controls
+			input#image.input-xlarge(type='text', name='image', placeholder='', ng-model='model.image')
+		.control-group
+			label.control-label(for='password') Password
+			.controls
+			input#password.input-xlarge(type='password', name='password', placeholder='', ng-model='model.password')
+		.control-group
+			label.control-label(for='password2') Re-enter Password
+			.controls
+			input#password2.input-xlarge(type='password', name='password2', placeholder='')		
+		.control-group
+			.controls
+			button.btn.btn-primary(type='submit',ng-click='events.register()') Register
+
+
+
+
+
