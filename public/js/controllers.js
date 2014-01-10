@@ -36,4 +36,18 @@ angular.module('ranter.controllers', ['ranter.services']).
   controller('WallController', function ($scope) {
     // write Ctrl here
 
+  }).
+  controller('RegisterController', function ($scope, $rootScope, $location, registerService) {
+       $scope.events = {register: function(){
+        registerService.register($scope.model.username, $scope.model.description, $scope.model.image, $scope.model.password)
+          .success(function(result){
+            $rootScope.rootModel = {};
+            $rootScope.rootModel.registerData = result;
+
+            $location.path('/wall');
+          })
+          .error(function(data, status){
+
+          });
+    }}
   });
