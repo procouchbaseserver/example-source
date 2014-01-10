@@ -18,6 +18,10 @@ config(function ($routeProvider, $locationProvider) {
       templateUrl: 'partials/wall',
       controller: 'WallController'
     }).
+    when('/register', {
+      templateUrl: 'partials/register',
+      controller: 'RegisterController'
+    }).
     when('/404', {
       templateUrl: 'partials/404'
     }).

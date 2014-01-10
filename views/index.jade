@@ -47,6 +47,7 @@ block body
 							input(type='checkbox')
 							| Remember me
 						button.btn.btn-default(type='submit',ng-click='events.login()') Sign in
+						a(href='#/register').btn.btn-default Register
 			div(ng-show='rootModel.loginData.isLoggedIn')
 				label.nav.navbar-nav.navbar-right(ng-bind='rootModel.loginData.name')
 

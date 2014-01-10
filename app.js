@@ -9,13 +9,13 @@ var users = require('./api/users.js');
 var app = module.exports = express();
 var port = process.env.PORT || 3000;
 
-var cbClient = new couchbase.Connection({
+var couchbaseClient = new couchbase.Connection({
   'bucket':'ranter',
   'host':'127.0.0.1:8091'
 });
 
 // all environments
-app.set('cbClient', cbClient);
+app.set('couchbaseClient', couchbaseClient);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.use('/bootstrap/css', express.static(__dirname + '/bootstrap/css'));
