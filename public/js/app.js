@@ -18,15 +18,17 @@ config(function ($routeProvider, $locationProvider) {
       templateUrl: 'partials/wall',
       controller: 'WallController'
     }).
-<<<<<<< HEAD
     when('/timeline', {
       templateUrl: 'partials/timeline',
       controller: 'WallController'
-=======
+    }).
     when('/register', {
       templateUrl: 'partials/register',
       controller: 'RegisterController'
->>>>>>> e908c7009cd0ecd97aa304dc09b47145194d9a12
+    }).
+    when('/aboutme'{
+      templateUrl: 'partials/about',
+      controller: 'AboutController'
     }).
     when('/404', {
       templateUrl: 'partials/404'

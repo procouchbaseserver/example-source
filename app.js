@@ -5,6 +5,7 @@ var express   = require('express'),
 
 // api modules
 var users = require('./api/users.js');
+var rants = require('./api/rants.js');
 
 var app = module.exports = express();
 var port = process.env.PORT || 3000;
@@ -39,6 +40,7 @@ app.get('/partials/:name', function patialRouts(req, res) {
 
 // setting up the api modules
 users.init(app);
+rants.init(app);
 
 http.createServer(app).listen(port, function () {
 	console.log('Express server listening on port ' + port);

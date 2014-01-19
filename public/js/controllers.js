@@ -50,4 +50,14 @@ angular.module('ranter.controllers', ['ranter.services']).
 
           });
     }}
+  }).
+  controller('AboutController', function ($scope, aboutService){
+    $scope.init = function(){
+      aboutService.getTop($scope.model.username)
+      .success(function(result){
+        $scope.model.rants = result;
+      })
+
+    };
   });
+
