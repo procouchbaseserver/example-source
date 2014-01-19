@@ -6,18 +6,26 @@ exports.init = function(app){
 	var couchbaseClient = app.get('couchbaseClient');
 	
 	app.get('/api/rants/wall', function(req, res) {
-		if( req.session.userData &&
-			req.session.userData.isLoggedIn &&
-			req.session.userData.name) {
 
-			//res.json({})
-		}
-		else {
-			res.json({error: "Not logged in."});
-		}
+		if( !req.session.userData ||
+    		!req.session.userData.isLoggedIn ||
+    		!req.session.userData.name) { 
+    		res.json({error: "Not logged in."});
+	    	return;
+	    }
+
+		//res.json({})
+
 	});
 
-	app.get('/api/rants/about/:uname', function (req, res){
+	app.get('/api/rants/about/:uname', function (req, res) {
+		if( !req.session.userData ||
+    		!req.session.userData.isLoggedIn ||
+    		!req.session.userData.name) { 
+    		res.json({error: "Not logged in."});
+	    	return;
+	    }
+
 		couchbaseClient.view('rants','rantabouts_by_original_ranter')
 		.query({limit: 10, key: req.params.uname}, function (error, results){
 			if(error){
