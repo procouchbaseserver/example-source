@@ -5,6 +5,7 @@ exports.init = function(app){
 	// getting the client instance from the application
 	var couchbaseClient = app.get('couchbaseClient');
 	
+	// Retrieve a list of rants on your wall
 	app.get('/api/rants/wall', function(req, res) {
 
 		if( !req.session.userData ||
@@ -16,11 +17,11 @@ exports.init = function(app){
 
 		//res.json({})
 
-	});
+	}); 
 
-	app.get('/api/rants/about/:uname', function (req, res) {
+	app.get('/api/rants/about/:username', function (req, res) {
 		couchbaseClient.view('rants','rantabouts_by_original_ranter')
-		.query({limit: 10, key: req.params.uname}, function (error, results){
+		.query({limit: 10, key: req.params.username}, function (error, results){
 			if(error){
 				console.log(error);
 				res.writeHead(500);
@@ -51,6 +52,7 @@ exports.init = function(app){
 	});
 
 
+	// Post a new rant
 	app.post('/api/rants/post', function(req, res) {
 
 	});

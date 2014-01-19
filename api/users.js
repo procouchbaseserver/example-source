@@ -42,7 +42,6 @@ exports.init = function(app){
 		}
 	});
 
-
     // the register API
     app.post('/api/register', function(req, res) {
 
@@ -85,7 +84,7 @@ exports.init = function(app){
 		}
 	});
 
-    app.get('/api/users/follow/:uname', function (req, res) {
+    app.get('/api/users/:action(follow|unfollow)/:username', function (req, res) {
 
     	if( !req.session.userData ||
     		!req.session.userData.isLoggedIn ||
@@ -94,13 +93,14 @@ exports.init = function(app){
 	    	return;
 	    }
 
-	    var followKey = "user-" + req.params.uname;
-	    var followerKey = "user-" + req.session.userData.name;
+	    var follow = req.params.username;
+	    var follower = req.session.userData.name;
+	    var operation = req.params.action;
     	var data = {};
 		var status = 200; // HTTP status: OK.
-	    console.log(followKey, followerKey);
+	    console.log(follow, follower);
 
-	    couchbaseClient.touch(followKey, userExistsCallback);
+	    couchbaseClient.touch("user-" + follow, userExistsCallback);
 
 	    function userExistsCallback(error, result) {
 			if(error) {
@@ -114,16 +114,43 @@ exports.init = function(app){
 				res.json(status, data);
 			} 
 			else {
-				AppendFollowerToUser(followKey, followerKey, appendFollowerCallback);
+				UpdateFollower(follow, follower, operation, updateFollowerCallback);
 			}
 		}
 
-		function appendFollowerCallback(status, data) {
+		function updateFollowerCallback(error, result) {
+			console.log(error, result);
+			if(error)
+				status = 500;
+			else
+				data = {
+					isFollowing: operation == "follow" ? true : false,
+					name: follow
+				};
+
 			res.json(status, data);
 		}
 	});
+
+	function UpdateFollower(follow, follower, operation, updateFollowerCallback) {
+
+		var key = "follow-" + follow;
+		var value = (operation == "follow" ? "+" : "-") + follower;
+
+		couchbaseClient.append(key, value, appendCallback);
+
+		function appendCallback(error, result) {
+
+			// 'Not stored' error means it's a first time append, 
+			// so we need to add the key
+			if( error &&
+			    error.code == couchbase.errors.notStored &&
+				operation == "follow") {
+				   	couchbaseClient.add(key, value, updateFollowerCallback);
+				}
+			else
+				updateFollowerCallback(error, result);
+		}
+	}
 };
 
-function AppendFollowerToUser(followKey, followerKey, appendFollowerCallback) {
-	appendFollowerCallback(407, {error: "bla"});
-}
