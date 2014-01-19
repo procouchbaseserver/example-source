@@ -94,16 +94,10 @@ module.exports = function(connect) {
 	 * @api public
 	 */
 	CouchbaseStore.prototype.set = function(sid, sess, fn) {
-		sid = this.getKey(sid);
+		var maxAge = sess.cookie.maxAge;
+		var ttl = typeof maxAge == 'number' ? maxAge / 1000 | 0 : 3600;
 
-		try {
-			var maxAge = sess.cookie.maxAge;
-			var ttl = 'number' == typeof maxAge ? maxAge / 1000 | 0 : oneDay;
-
-			this.client.set(sid, sess, {expiry: ttl}, ensureCallback(fn));
-		} catch (err) {
-			fn && fn(err);
-		}
+		client.set(sid, sess, {expiry: ttl}, fn);
 	};
 
 	/**

@@ -13,9 +13,9 @@ mod.service('loginService',function($http,$q){
 				password: password
 			};
 			return $http.post('/api/login',data);
-		}}
-		
+		}}		
 	});
+
 mod.service('registerService',function($http,$q){
 		return {register: function(username, description, image, password){
 			var data = {
@@ -25,6 +25,5 @@ mod.service('registerService',function($http,$q){
 				password: password
 			};
 			return $http.post('/api/register', data);
-		}}
-            		
+		}}            		
 	});
