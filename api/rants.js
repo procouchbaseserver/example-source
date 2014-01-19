@@ -19,13 +19,6 @@ exports.init = function(app){
 	});
 
 	app.get('/api/rants/about/:uname', function (req, res) {
-		if( !req.session.userData ||
-    		!req.session.userData.isLoggedIn ||
-    		!req.session.userData.name) { 
-    		res.json({error: "Not logged in."});
-	    	return;
-	    }
-
 		couchbaseClient.view('rants','rantabouts_by_original_ranter')
 		.query({limit: 10, key: req.params.uname}, function (error, results){
 			if(error){
