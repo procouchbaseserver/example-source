@@ -29,13 +29,13 @@ exports.init = function(app){
 				res.end();
 			} else {
 				getRants(results,res);
-				}
+			}
 		});
 	});
 
 
 	// Post a new rant
-	app.post('/api/rants/', function (req, res) {
+	app.post('/api/rants', function (req, res) {
 		console.log(req.body);
 
 		var rant = req.body;
@@ -54,25 +54,8 @@ exports.init = function(app){
 				});
 		});
 	});
-};
 
-function getRants (results, res){
-
-	// retrive the id property from each object in 
-	// the results collection
-	var ids = _.pluck(results, 'id');
-
-	connection.getMulti(ids, {}, function(err, results) {
-		if(err){
-			res.writeHead(500);
-			res.end();
-		} else {
-			var rants = _.pluck(rants, 'value');		
-			res.json(rants); // write the rants array to the server response
-		}
-	});
-
-	// Delete a rant
+		// Delete a rant
 	app.delete('/api/rants/:id', function(req, res) {
 		if( !req.session.userData ||
     		!req.session.userData.isLoggedIn ||
@@ -100,4 +83,22 @@ function getRants (results, res){
 			res.json(status, data);
 		}
 	});
+};
+
+function getRants (results, res){
+
+	// retrive the id property from each object in 
+	// the results collection
+	var ids = _.pluck(results, 'id');
+
+	connection.getMulti(ids, {}, function(err, results) {
+		if(err){
+			res.writeHead(500);
+			res.end();
+		} else {
+			var rants = _.pluck(rants, 'value');		
+			res.json(rants); // write the rants array to the server response
+		}
+	});
+
 }
