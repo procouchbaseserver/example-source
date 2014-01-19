@@ -1,9 +1,10 @@
-var couchbase = require('couchbase');
+var couchbase = require('couchbase'),
+	_ = require('underscore');
 
 exports.init = function(app){
 
 	// getting the client instance from the application
-	var couchbaseClient = app.get('couchbaseClient');
+	var connection = app.get('couchbaseClient');
 	
 	// Retrieve a list of rants on your wall
 	app.get('/api/rants', function(req, res) {
@@ -11,7 +12,7 @@ exports.init = function(app){
 		if( !req.session.userData ||
     		!req.session.userData.isLoggedIn ||
     		!req.session.userData.name) { 
-    		res.json({error: "Not logged in."});
+    		res.json(401, {error: "Not logged in."});
 	    	return;
 	    }
 
@@ -20,41 +21,55 @@ exports.init = function(app){
 	}); 
 
 	app.get('/api/rants/about/:username', function (req, res) {
-		couchbaseClient.view('rants','rantabouts_by_original_ranter')
+		connection.view('rants','rantabouts_by_original_ranter')
 		.query({limit: 10, key: req.params.username}, function (error, results){
 			if(error){
 				console.log(error);
 				res.writeHead(500);
 				res.end();
 			} else {
-				var ids = [];
-				for (var i = 0; i < results.length; ++i) {
-					ids.push(results[i].id);
+				getRants(results,res);
 				}
-
-				couchbaseClient.getMulti(ids, {}, function(err, results) {
-					if(err){
-						res.writeHead(500);
-						res.end();
-					} else {
-						var rants = [];		
-						for(var key in results) {
-							var result = results[key];
-							if(result.value) 
-								rants.push(result.value);
-						};
-						res.json(rants); // write the rants array to the server response
-					}
-				});
-
-			}
 		});
 	});
 
 
 	// Post a new rant
-	app.post('/api/rants/post', function(req, res) {
+	app.post('/api/rants/', function (req, res) {
+		console.log(req.body);
 
+		var rant = req.body;
+		rant.date = new Date();
+
+		var userkey = rant.userName.toLowerCase() + '-rant';
+		connection.incr(userkey, {initial: 1, offset: 1}, function(err, result) {
+
+			connection.add(userkey + '-' + result.value, rant, function (err, result){
+					if(err){
+						res.writeHead(500);
+						res.end();
+					} else {
+					res.json(result.value);
+					}
+				});
+		});
+	});
+};
+
+function getRants (results, res){
+
+	// retrive the id property from each object in 
+	// the results collection
+	var ids = _.pluck(results, 'id');
+
+	connection.getMulti(ids, {}, function(err, results) {
+		if(err){
+			res.writeHead(500);
+			res.end();
+		} else {
+			var rants = _.pluck(rants, 'value');		
+			res.json(rants); // write the rants array to the server response
+		}
 	});
 
 	// Delete a rant
@@ -85,4 +100,4 @@ exports.init = function(app){
 			res.json(status, data);
 		}
 	});
-};
+}
