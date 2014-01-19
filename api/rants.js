@@ -3,7 +3,7 @@ var couchbase = require('couchbase');
 exports.init = function(app){
 
 	// getting the client instance from the application
-	var couchbaseClient = app.get('couchbaseClient');
+	var connection = app.get('couchbaseClient');
 	
 	// Retrieve a list of rants on your wall
 	app.get('/api/rants/wall', function(req, res) {
@@ -20,7 +20,7 @@ exports.init = function(app){
 	}); 
 
 	app.get('/api/rants/about/:username', function (req, res) {
-		couchbaseClient.view('rants','rantabouts_by_original_ranter')
+		connection.view('rants','rantabouts_by_original_ranter')
 		.query({limit: 10, key: req.params.username}, function (error, results){
 			if(error){
 				console.log(error);
@@ -32,7 +32,7 @@ exports.init = function(app){
 					ids.push(results[i].id);
 				}
 
-				couchbaseClient.getMulti(ids, {}, function(err, results) {
+				connection.getMulti(ids, {}, function(err, results) {
 					if(err){
 						res.writeHead(500);
 						res.end();
