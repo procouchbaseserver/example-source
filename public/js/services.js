@@ -11,6 +11,7 @@ mod.service('loginService',function($http,$q){
 	}}
 	
 });
+
 mod.service('registerService',function($http,$q){
 	return {register: function(username, description, image, password){
 		var data = {
@@ -23,6 +24,7 @@ mod.service('registerService',function($http,$q){
 	}}
         		
 });
+
 mod.service('aboutService',function($http,$q){
 	return {getTop: function(username){
 		return $http.get('api/rants/about/' + username);
