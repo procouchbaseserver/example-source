@@ -9,6 +9,7 @@ exports.init = function(app){
 	app.post('/api/login', function(req, res){
 		var key = "user-" + req.body.username;
 		couchbaseClient.get(key, getUserCallback);
+		console.log(key);
 
 		function getUserCallback(error, result) {
 			var data = {};
@@ -114,7 +115,7 @@ exports.init = function(app){
 				res.json(status, data);
 			} 
 			else {
-				UpdateFollower(follow, follower, operation, updateFollowerCallback);
+				updateFollower(follow, follower, operation, updateFollowerCallback);
 			}
 		}
 
@@ -132,7 +133,7 @@ exports.init = function(app){
 		}
 	});
 
-	function UpdateFollower(follow, follower, operation, updateFollowerCallback) {
+	function updateFollower(follow, follower, operation, updateFollowerCallback) {
 
 		var key = "follow-" + follow;
 		var value = (operation == "follow" ? "+" : "-") + follower;

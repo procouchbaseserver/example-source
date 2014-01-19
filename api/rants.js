@@ -6,7 +6,7 @@ exports.init = function(app){
 	var couchbaseClient = app.get('couchbaseClient');
 	
 	// Retrieve a list of rants on your wall
-	app.get('/api/rants/wall', function(req, res) {
+	app.get('/api/rants', function(req, res) {
 
 		if( !req.session.userData ||
     		!req.session.userData.isLoggedIn ||
@@ -55,5 +55,34 @@ exports.init = function(app){
 	// Post a new rant
 	app.post('/api/rants/post', function(req, res) {
 
+	});
+
+	// Delete a rant
+	app.delete('/api/rants/:id', function(req, res) {
+		if( !req.session.userData ||
+    		!req.session.userData.isLoggedIn ||
+    		!req.session.userData.name) { 
+    		res.json(401, {error: "Not logged in."});
+	    	return;
+	    }
+
+		var rantKey = req.session.userData.name + "-rant-" + req.params.id;
+		couchbaseClient.remove(rantKey, removeCallback);
+
+		function removeCallback(error, result) {
+			var data = {};
+			var status = 200; // HTTP status: OK.
+
+			if(error) {
+				if(error.code == couchbase.errors.keyNotFound) {
+					status = 404; // HTTP status: Resource not found.
+					data = {error: "Rant does not exist."};
+				}
+				else 
+					status = 500; // HTTP status: Internal Server Error.
+			}		
+
+			res.json(status, data);
+		}
 	});
 };
