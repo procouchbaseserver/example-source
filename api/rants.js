@@ -3,10 +3,10 @@
 exports.init = function(app){
 
 	// getting the client instance from the application
-	var couchbaseClient = app.get('couchbaseClient');
+	var connection = app.get('couchbaseClient');
 	
 	app.get('/api/rants/about/:uname', function (req, res){
-		couchbaseClient.view('rants','rantabouts_by_original_ranter')
+		connection.view('rants','rantabouts_by_original_ranter')
 		.query({limit: 10, key: req.params.uname}, function (error, results){
 			if(error){
 				console.log(error);
@@ -18,18 +18,17 @@ exports.init = function(app){
 					ids.push(results[i].id);
 				}
 
-				couchbaseClient.getMulti(ids, {}, function(err, results) {
+				connection.getMulti(ids, {}, function(err, results) {
 					if(error){
 						res.writeHead(500);
 						res.end();
 					} else {
-						var rants = _.map(results, function (o) {
+						var x = _.map(results, function (o) {
 							return o.value;
 						});
-						res.json(rants);
+						res.json(x);
 					}
 				});
-
 			}
 		});
 	});

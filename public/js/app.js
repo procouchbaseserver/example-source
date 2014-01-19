@@ -26,7 +26,7 @@ config(function ($routeProvider, $locationProvider) {
       templateUrl: 'partials/register',
       controller: 'RegisterController'
     }).
-    when('/aboutme'{
+    when('/about', {
       templateUrl: 'partials/about',
       controller: 'AboutController'
     }).
