@@ -6,7 +6,7 @@ exports.init = function(app){
 	var couchbaseClient = app.get('couchbaseClient');
 
 	// the login API
-	app.post('/api/login', function(req, res){
+	app.post('/api/login/', function(req, res){
 		var key = "user-" + req.body.username;
 		couchbaseClient.get(key, getUserCallback);
 		console.log(key);
@@ -44,7 +44,7 @@ exports.init = function(app){
 	});
 
     // the register API
-    app.post('/api/register', function(req, res) {
+    app.post('/api/register/', function(req, res) {
 
     	var user = {
     		type: "user",
