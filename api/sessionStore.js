@@ -71,8 +71,10 @@ module.exports = function(connect) {
 	 */
 	CouchbaseStore.prototype.get = function(sid, fn) {
 		sid = this.getKey(sid);
+		var maxAge = sess.cookie.maxAge;
+		var ttl = typeof maxAge == 'number' ? maxAge / 1000 | 0 : 3600;
 
-		this.client.get(sid, function(err, data) {
+		client.get(sid, {expiry: ttl}, function(err, data) {
       if (err) { return fn(err, {}); }
 			try {
 				if (!data) {

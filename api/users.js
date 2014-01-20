@@ -29,7 +29,6 @@ exports.init = function(app){
 					data = {error: "Invalid username or password."};
 				} 
 				else {	
-					console.log(JSON.stringify(result));
 					data = {
 						isLoggedIn: true,
 						name: result.value.username
@@ -56,21 +55,20 @@ exports.init = function(app){
     	};
 
 		// add the new user to the database
-		couchbaseClient.add("user-" + user.username, user, addUserCallback);
+		couchbaseClient.add("user-" + user.username, user, {persist_to: 1, replicate_to: 0}, addUserCallback);
 		
-		function addUserCallback(err, result) {
-			
-			if(err) {
-				console.log(err);
+		function addUserCallback(error, result) {
+			console.log(error, result);
+			var data = {};
+			var status = 200; // HTTP status: OK.
 
-				if(err.code == couchbase.errors.keyAlreadyExists) {
-					res.writeHead(409); // HTTP status: Conflict
-					res.json({error: "User already exists."});
-					res.end();
+			if(error) {
+				if(error.code == couchbase.errors.keyAlreadyExists) {
+					status = 409; // HTTP status: Conflict
+					data = {error: "User already exists."};
 				}
 				else {
-					res.writeHead(500); // HTTP status: Internal Server Error
-					res.end();
+					status = 500; // HTTP status: Internal Server Error
 				}
 			}
 			else {	
@@ -80,8 +78,9 @@ exports.init = function(app){
 				};	
 
 				req.session.userData = data;
-				res.json(data);
 			}
+
+			res.json(data);
 		}
 	});
 
