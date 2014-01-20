@@ -49,24 +49,37 @@ exports.init = function(app){
 
 	// Post a new rant
 	app.post('/api/rants', function (req, res) {
-		console.log(req.body);
-
 		var rant = req.body;
 		rant.date = new Date();
 		rant.rantbacks = uuid.v4();
 
-		var userkey = rant.userName.toLowerCase() + '-rant';
-		connection.incr(userkey, {initial: 1, offset: 1}, function(err, result) {
+		var userKey = "rant-" + rant.userName;
+		var counterKey = userKey + "-count";
+		connection.incr(counterKey, {initial: 1, offset: 1}, incrementCallback);
 
-			connection.add(userkey + '-' + result.value, rant, function (err, result){
-					if(err){
-						res.writeHead(500);
-						res.end();
-					} else {
-					res.json(result.value);
-					}
-				});
-		});
+		function incrementCallback(error, result) {
+			if(error) {
+				res.writeHead(500);
+				res.end();
+			}
+			else {
+				var documents = {};
+				var rantKey = userKey + '-' + result.value;
+				var rantbacksKey = rant.rantbacks;
+				documents[rantKey] = { value: rant };
+				documents[rantbacksKey] = { value : [] };
+				connection.setMulti(documents, {}, setMultiCallback);
+			}
+		}
+
+		function setMultiCallback(error, result) {
+			if(error){
+				res.writeHead(500); // HTTP status: Internal Server Error.
+				res.end();
+			} else {
+				res.json(201, rant); // HTTP status: Created.
+			}
+		};
 	});
 
 	// Delete a rant
@@ -78,7 +91,7 @@ exports.init = function(app){
 	    	return;
 	    }
 
-		var rantKey = req.session.userData.name + "-rant-" + req.params.id;
+		var rantKey = "rant-" + req.session.userData.name + req.params.id;
 		couchbaseClient.remove(rantKey, removeCallback);
 
 		function removeCallback(error, result) {
