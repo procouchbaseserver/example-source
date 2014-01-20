@@ -1,10 +1,12 @@
 var couchbase = require('couchbase'),
+	uuid = require('uuid'),
 	_ = require('underscore');
 
 exports.init = function(app){
 
 	// getting the client instance from the application
 	var connection = app.get('couchbaseClient');
+	//http://localhost.:3000/api/rants?start=19-1-2014&end=20-1-2014
 	
 	// Retrieve a list of rants on your wall
 	app.get('/api/rants', function(req, res) {
@@ -14,7 +16,7 @@ exports.init = function(app){
 		// 	!req.session.userData.name) { 
 		// 	res.json(401, {error: "Not logged in."});
 		// 	return;
-		// }	
+		// }
 		//res.json({})
 
 		var startDate = new Date(req.query.start);
@@ -51,6 +53,7 @@ exports.init = function(app){
 
 		var rant = req.body;
 		rant.date = new Date();
+		rant.rantbacks = uuid.v4();
 
 		var userkey = rant.userName.toLowerCase() + '-rant';
 		connection.incr(userkey, {initial: 1, offset: 1}, function(err, result) {
@@ -94,22 +97,25 @@ exports.init = function(app){
 			res.json(status, data);
 		}
 	});
+
+	function getRants (results, res){
+
+		// retrive the id property from each object in 
+		// the results collection
+		var ids = _.pluck(results, 'id');
+
+		connection.getMulti(ids, {}, function(err, results) {
+			if(err){
+				console.log(err.error);
+				res.writeHead(500);
+				res.end();
+			} else {
+				var rants = _.pluck(results, 'value');	
+				console.log(rants)	
+				res.json(rants); // write the rants array to the server response
+			}
+		});
+
+	}
 };
 
-function getRants (results, res){
-
-	// retrive the id property from each object in 
-	// the results collection
-	var ids = _.pluck(results, 'id');
-
-	connection.getMulti(ids, {}, function(err, results) {
-		if(err){
-			res.writeHead(500);
-			res.end();
-		} else {
-			var rants = _.pluck(rants, 'value');		
-			res.json(rants); // write the rants array to the server response
-		}
-	});
-
-}
