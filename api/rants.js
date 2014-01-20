@@ -9,19 +9,31 @@ exports.init = function(app){
 	// Retrieve a list of rants on your wall
 	app.get('/api/rants', function(req, res) {
 
-		if( !req.session.userData ||
-    		!req.session.userData.isLoggedIn ||
-    		!req.session.userData.name) { 
-    		res.json(401, {error: "Not logged in."});
-	    	return;
-	    }
-
+		// if( !req.session.userData ||
+		// 	!req.session.userData.isLoggedIn ||
+		// 	!req.session.userData.name) { 
+		// 	res.json(401, {error: "Not logged in."});
+		// 	return;
+		// }	
 		//res.json({})
 
+		var startDate = new Date(req.query.start);
+		var endDate = new Date(req.query.end);
+
+		var view = connection.view('rants', 'by_date');
+		view.query({startkey: startDate, endkey: endDate}, function (error, results){
+			if(error){
+				console.log(error);
+				res.writeHead(500);
+				res.end();
+			} else {
+				getRants(results,res);
+			}
+		});
 	}); 
 
 	app.get('/api/rants/about/:username', function (req, res) {
-		connection.view('rants','rantabouts_by_original_ranter')
+		connection.view('rants', 'rantabouts_by_original_ranter')
 		.query({limit: 10, key: req.params.username}, function (error, results){
 			if(error){
 				console.log(error);
@@ -32,7 +44,6 @@ exports.init = function(app){
 			}
 		});
 	});
-
 
 	// Post a new rant
 	app.post('/api/rants', function (req, res) {
@@ -55,7 +66,7 @@ exports.init = function(app){
 		});
 	});
 
-		// Delete a rant
+	// Delete a rant
 	app.delete('/api/rants/:id', function(req, res) {
 		if( !req.session.userData ||
     		!req.session.userData.isLoggedIn ||
