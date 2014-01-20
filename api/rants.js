@@ -11,14 +11,6 @@ exports.init = function(app){
 	// Retrieve a list of rants on your wall
 	app.get('/api/rants', function(req, res) {
 
-		// if( !req.session.userData ||
-		// 	!req.session.userData.isLoggedIn ||
-		// 	!req.session.userData.name) { 
-		// 	res.json(401, {error: "Not logged in."});
-		// 	return;
-		// }
-		//res.json({})
-
 		var startDate = new Date(req.query.start);
 		var endDate = new Date(req.query.end);
 
@@ -63,7 +55,7 @@ exports.init = function(app){
 						res.writeHead(500);
 						res.end();
 					} else {
-					res.json(result.value);
+						res.json(result.value);
 					}
 				});
 		});
