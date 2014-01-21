@@ -74,17 +74,43 @@ exports.init = function(app){
 		};
 	});
 
+	// Post a rantback
+	app.post('/api/rants/:id', function(req, res) {
+
+		var rantKey = req.params.id;
+		connection.get(rantKey, getCallback);
+
+		function getCallback(error, result) {
+			if(error) {
+				if(error.code == couchbase.errors.keyNotFound)
+					res.json(404, {error: "Rant does not exist."}); // HTTP status: Resource not found.
+				else
+					res.json(500, {}); // HTTP status: Internal Server Error.
+			}
+			else {
+				var rantbacksKey = result.value.rantbacks;
+				var rantback = req.body;
+
+				// Update the rantbacks document, 
+				// retry up to 10 times if the operation fails.
+				//updateRantbacksWithRetry(rantbacksKey, rantback, 10, updateCallback);
+
+				// Update the rantbacks document,
+				// try to acquire a lock up to 100 times.
+				updateRantbacksWithLock(rantbacksKey, rantback, 100, updateCallback);
+			}	
+		}
+
+		function updateCallback(status, data) {
+			res.json(status, data);
+		}
+	});
+
 	// Delete a rant
 	app.delete('/api/rants/:id', function(req, res) {
-		if( !req.session.userData ||
-    		!req.session.userData.isLoggedIn ||
-    		!req.session.userData.name) { 
-    		res.json(401, {error: "Not logged in."});
-	    	return;
-	    }
 
-		var rantKey = "rant-" + req.session.userData.name + req.params.id;
-		couchbaseClient.remove(rantKey, removeCallback);
+		var rantKey = req.params.id;
+		connection.remove(rantKey, removeCallback);
 
 		function removeCallback(error, result) {
 			var data = {};
@@ -104,7 +130,6 @@ exports.init = function(app){
 	});
 
 	function getRants (results, res){
-
 		// retrive the id property from each object in 
 		// the results collection
 		var ids = _.pluck(results, 'id');
@@ -120,7 +145,54 @@ exports.init = function(app){
 				res.json(rants); // write the rants array to the server response
 			}
 		});
+	}
 
+	function updateRantbacksWithRetry(rantbacksKey, rantback, retries, updateCallback) {
+		connection.get(rantbacksKey, function(error, result) {
+			if(error) 
+				return updateCallback(500, {});
+
+			var cas = result.cas;
+			var rantbacks = result.value;
+			rantbacks.push(rantback);
+
+			connection.set(rantbacksKey, rantbacks, {cas: cas}, function (error, result) {
+				if (error) {
+					if( retries > 1 &&
+					    error.code == couchbase.errors.keyAlreadyExists) {
+						// Document was changed between the get and set.
+						return updateRantbacksWithRetry(rantbacksKey, rantback, retries - 1, updateCallback);
+					}
+					else
+						return updateCallback(500, {});
+				}
+				else
+					return updateCallback(200, {});				
+			});
+		});
+	}
+
+	function updateRantbacksWithLock(rantbacksKey, rantback, retries, updateCallback) {
+		connection.lock(rantbacksKey, {lockTime : 5}, function(error, result) {
+			if(error)
+				// temporaryError means the document is locked
+				if( error.code == couchbase.errors.temporaryError &&
+				    retries > 1) 
+					return updateRantbacksWithLock(rantbacksKey, rantback, retries - 1, updateCallback);
+				else
+					return updateCallback(500, {});
+
+			var cas = result.cas;
+			var rantbacks = result.value;
+			rantbacks.push(rantback);
+
+			connection.set(rantbacksKey, rantbacks, {cas: cas}, function (error, result) {			
+				if (error)
+					return updateCallback(500, {});
+				else
+					return updateCallback(200, {});
+			});
+		});
 	}
 };
 
