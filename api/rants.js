@@ -31,7 +31,6 @@ exports.init = function(app){
 	// Retrieve a count of rants per-date (dayly|monthly|yearly)
 	app.get('/api/rants/:level(dayly|monthly|yearly)/count', function(req, res) {
 
-
 		var view = connection.view('rants', 'per_date');
 		view.query({ group_level:levels[req.params.level] }, function (error, results){
 			if(error){
