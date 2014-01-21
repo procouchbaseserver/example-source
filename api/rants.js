@@ -2,11 +2,13 @@ var couchbase = require('couchbase'),
 	uuid = require('uuid'),
 	_ = require('underscore');
 
+var levels = {"yearly":1, "monthly":2, "dayly":3};
+
 exports.init = function(app){
 
 	// getting the client instance from the application
 	var connection = app.get('couchbaseClient');
-	//http://localhost.:3000/api/rants?start=19-1-2014&end=20-1-2014
+	//http://localhost.:3000/api/rants?start=1-19-2014&end=1-20-2014
 	
 	// Retrieve a list of rants on your wall
 	app.get('/api/rants', function(req, res) {
@@ -22,6 +24,26 @@ exports.init = function(app){
 				res.end();
 			} else {
 				getRants(results,res);
+			}
+		});
+	}); 
+
+	// Retrieve a count of rants per-date (dayly|monthly|yearly)
+	app.get('/api/rants/:level(dayly|monthly|yearly)/count', function(req, res) {
+
+		console.log(levels[req.params.level]);
+		console.log('----------');
+
+		var view = connection.view('rants', 'per_date');
+		view.query({ group_level:levels[req.params.level] }, function (error, results){
+			if(error){
+				console.log(error);
+				res.writeHead(500);
+				res.end();
+			} else {
+				console.log(results);
+				console.log('----------');
+				res.json(results);
 			}
 		});
 	}); 
@@ -120,7 +142,6 @@ exports.init = function(app){
 				res.json(rants); // write the rants array to the server response
 			}
 		});
-
 	}
 };
 
