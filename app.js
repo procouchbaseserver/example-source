@@ -11,7 +11,7 @@ var rants = require('./api/rants.js');
 
 var app = module.exports = express();
 var port = process.env.PORT || 3000;
-
+console.log(couchbase.connection);
 var connection = new couchbase.Connection({
   'bucket':'ranter',
   'host':'127.0.0.1:8091'
@@ -34,15 +34,7 @@ app.use(express.methodOverride());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(app.router);
 
-// setting up the index and view partials
-app.get('/', function homeRout(req, res){
-	res.render('index');
-});
-
-app.get('/partials/:name', function patialRouts(req, res) {
-	var name = req.params.name;
-	res.render('partials/' + name);
-});
+app.use('/', express.static(path.join(__dirname, '/client')));
 
 // setting up the api modules
 users.init(app);

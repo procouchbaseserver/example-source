@@ -1,3 +1,5 @@
 node_modules
 ranter.sublime-project
 ranter.sublime-workspace
+.idea
+bower_components

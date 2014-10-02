@@ -1,0 +1,263 @@
+﻿
+@font-face {
+  font-family: glyphicon;
+  src: url("../font/glyphicons-halflings-regular.eot?") format("eot"), url("../font/glyphicons-halflings-regular.woff") format("woff"), url("../font/glyphicons-halflings-regular.otf") format("opentype"), url("../font/glyphicons-halflings-regular.ttf") format("embedded-opentype"), url("../font/glyphicons-halflings-regular.svg#glyphicon") format("svg"); }
+
+body{
+    background-color: #eee;
+    font-family:Helvetica, Arial, tahoma, verdana, sans-serif;
+}
+
+header{
+    background:#e74c3c;
+    height: 72px;
+    border-bottom:1px solid gray;
+    box-shadow: lightgray 0 2px 4px 0;
+    text-align: center;
+}
+
+.logoRanter{
+    
+}
+
+
+/***************** login styles ******************/
+
+.loginContainer {
+    margin: 60px auto;
+    width:340px;
+    border-radius:4px;
+    border:#ddd solid 1px;
+    background:#f9f9f9;
+    box-shadow: lightgray 0 6px 7px 0;
+    padding: 10px;
+}
+
+.loginSubContainer{
+    padding:7px;
+}
+
+
+.input-group{
+    margin:10px;
+    margin-left:auto;
+    margin-right:auto;
+    padding:0 14px;
+}
+
+.panel-heading{
+    border-color:#ddd;
+    padding: 8px 20px;
+}
+
+.row{
+    margin:0;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.btn-lg, .btn-group-lg > .btn {
+    font-size: 16px;
+    padding: 6px 12px;
+}
+
+.panel-title {
+    font-size: 1.6em;
+}
+
+/***************** register styles ******************/
+.formContainer {
+    margin: 60px auto;
+    width: 340px;
+    border-radius: 4px;
+    border: #ddd solid 1px;
+    background: #f9f9f9;
+    box-shadow: lightgray 0 6px 7px 0;
+    padding: 0 30px;
+    padding-bottom: 20px;
+}
+
+.subHeader{
+    display:block;
+    padding-top: 10px;
+    color: lightgray;
+}
+
+.formHeaderContainer{
+    text-align:center;
+    color:#555;
+}
+
+.formBtnContainer {
+    width: 40%;
+    display: inline-block;
+    margin: 0 12px;
+}
+.formFooter{
+    text-align: center;
+}
+
+.input-lg{
+    height:34px;
+    font-size: 1em;
+}
+
+.form-group {
+    margin-bottom: 10px;
+}
+
+.uplaodPictureBtnContainer{
+    padding: 0;
+    border: 0;
+    box-shadow: inset #B3B3B3 0 -1px 0 0;
+}
+
+.uplaodPictureBtn{
+    border-radius: 0 4px 4px 0;
+    font-size: 15px;
+    padding-top: 6px;
+    padding-bottom: 4px;
+}
+
+.uplaodPictureFiels:focus {
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    border-color:#ccc;
+}
+
+/***************** feed styles ******************/
+
+.mainFeedPageContainer{
+    width: 650px;
+    margin-left: -382px;
+    margin-right: auto;
+    margin-top: 20px;
+    left: 50%;
+    position: absolute;
+}
+
+.personalProfileContainer{
+    float:left;
+    margin-right: 20px;
+}
+
+.ranterUsername{
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.leftFloat{
+    float:left;
+}
+
+.layoutInline{
+    display:inline-block;
+}
+
+.noPadding{
+    padding:0;
+}
+
+.feederPicture{
+    margin-top: -20px;
+}
+
+.personalProfilePicture{
+    float:left;
+    margin-right: 10px;
+}
+
+.ranterEditProfile{
+    display:block;
+    cursor:pointer;
+}
+.mainFeedContainer{
+    margin: 0 auto;
+    width: 490px;
+    float:left;
+}
+
+.postFeedHeader, .glyphicon{
+    color: #555;
+}
+
+.postFeedContainer{
+    background:white;
+    border:1px solid #ddd;
+    border-radius:4px;
+    box-shadow: lightgray 0 1px 1px 0;
+    padding:10px;
+    width:490px;
+    margin-bottom: 12px;
+}
+
+.rantTextarea{
+   width:470px;
+   resize:none;
+   padding: 5px;
+   overflow: auto;
+   min-height:50px;
+}
+
+.rantTextarea[placeholder]:empty:before {
+    content: attr(placeholder);
+    color: #ddd; 
+    font-weight:normal;
+}
+
+.postFeedContainer hr{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.postBtn{
+    float:right;
+}
+
+.glyphicon-pencil{
+    margin-right:4px;
+}
+
+.feedInfo, .feedPostDate{
+    display:block;
+    font-size:0.8em;
+    color: #555;
+}
+
+.postFeedFooter .personalProfilePicture{
+    width:32px;
+    height:32px;
+}
+
+.feedContent{
+    padding-top:12px;
+}
+
+.feedResponse{
+    font-size:0.8em;
+    cursor:pointer;
+    padding-left:2px;
+    padding-right:2px;
+}
+
+.likeDescription{
+    font-size:0.7em;
+}
+
+.ranterCommentContainer{
+    width:360px;
+}
+
+.ranterImgContainer{
+    width:360px;
+}
+
+.registerProfileImg{
+    background: url(../Images/user.jpg) center center no-repeat;
+    border: 2px solid lightgray;
+    border-radius: 80px;
+    margin: 0 auto;
+    display: block;
+    width:100px;
+    height:100px; 
+    margin-bottom: -10px;
+}

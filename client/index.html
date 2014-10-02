@@ -1,16 +1,19 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="ranter">
 <head>
     <title>Welcome to ranter</title>
     <link href="assets/css/reset.css" rel="stylesheet" />
     <link href="assets/css/bootstrap.css" rel="stylesheet" />
     <link href="assets/css/Styles.css" rel="stylesheet" />
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="js/app.js"></script>
 </head>
 <body>
     <header>
         <img class="logoRanter" src="assets/Images/Ranter_Logo.png" />
     </header>
-    <div ng-view>
+    <div ui-view>
         
     </div>
 </body>

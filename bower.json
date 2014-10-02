@@ -1,0 +1,16 @@
+{
+  "name": "ranter-node",
+  "version": "0.0.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.3.0-rc.4",
+    "angular-ui": "~0.4.0",
+    "angular-ui-router": "~0.2.11"
+  }
+}
