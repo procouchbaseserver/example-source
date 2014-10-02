@@ -14,20 +14,20 @@
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-user"></span>
                         </span>
-                        <input type="text" class="form-control" placeholder="Username">
+                        <input type="text" class="form-control" placeholder="Username" ng-model="model.username">
                     </div>
                 </div>
                 <div class="input-group">
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-envelope"></span>
                     </span>
-                    <input type="text" class="form-control" placeholder="Email">
+                    <input type="text" class="form-control" placeholder="Email" ng-model="mode.email">
                 </div>
                 <div class="input-group">
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-picture"></span>
                     </span>
-                    <input type="text" class="form-control uplaodPictureFiels" readonly placeholder="Profile picture">
+                    <input type="text" class="form-control uplaodPictureFiels" readonly placeholder="Profile picture" ng-model="model.image">
                     <span class="input-group-addon uplaodPictureBtnContainer">
                         <button class="btn uplaodPictureBtn" type="button">
                             <span class="glyphicon glyphicon-folder-open"></span>
@@ -39,7 +39,7 @@
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-lock"></span>
                         </span>
-                        <input type="text" class="form-control" placeholder="Password">
+                        <input type="text" class="form-control" placeholder="Password" ng-model="model.password">
                     </div>
                     <div class="input-group">
                         <span class="input-group-addon">
@@ -50,7 +50,7 @@
                 </div>
                 <hr class="colorgraph">
                 <div class="formFooter">
-                    <div class="formBtnContainer"><input type="submit" value="Register" class="btn btn-primary btn-block btn-lg" tabindex="7"></div>
+                    <div class="formBtnContainer"><input type="submit" value="Register" class="btn btn-primary btn-block btn-lg" tabindex="7" ng-click="events.register()"></div>
                     <div class="formBtnContainer"><a href="#" class="btn btn-success btn-block btn-lg" ui-sref="root">Sign In</a></div>
                 </div>
             </form>

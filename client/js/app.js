@@ -2,16 +2,18 @@
 
 // Declare app level module which depends on filters, and services
 
-angular.module('ranter', ['ui.router'])
+angular.module('ranter', ['ui.router', 'ranter.controllers', 'ranter.filters', 'ranter.directives', 'ranter.services'])
     .config(function ($stateProvider) {
         $stateProvider
             .state('rootClean', {
                 url: '',
-                templateUrl: 'partials/login.html'
+                templateUrl: 'partials/login.html',
+                controller: 'LoginController'
             })
             .state('register', {
                 url: '/register',
-                templateUrl: 'partials/register.html'
+                templateUrl: 'partials/register.html',
+                controller: 'RegisterController'
             })
             .state('feed', {
                 url: '/feed',
@@ -19,6 +21,7 @@ angular.module('ranter', ['ui.router'])
             })
             .state('root', {
                 url: '/',
-                templateUrl: 'partials/login.html'
+                templateUrl: 'partials/login.html',
+                controller: 'LoginController'
             })
     });

@@ -11,7 +11,7 @@ var rants = require('./api/rants.js');
 
 var app = module.exports = express();
 var port = process.env.PORT || 3000;
-console.log(couchbase.connection);
+
 var connection = new couchbase.Connection({
   'bucket':'ranter',
   'host':'127.0.0.1:8091'
