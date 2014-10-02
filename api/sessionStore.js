@@ -80,7 +80,7 @@ module.exports = function(connect) {
 				if (!data) {
 					return fn();
 				}
-				fn(null, data.value));
+				fn(null, data.value);
 			} catch (e) {
 				fn(e);
 			}

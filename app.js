@@ -25,7 +25,7 @@ spatialView.get(connection, 'ranter', '', '');
 app.set('connection', connection);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
-app.use('/bootstrap/css', express.static(__dirname + '/bootstrap/css'));
+app.use('/', express.static(__dirname + '/views'));
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.cookieParser());
