@@ -1,7 +1,9 @@
 var express   = require('express'),
 	http      = require('http'),
 	path      = require('path'),
-	couchbase = require('couchbase');
+	couchbase = require('couchbase')
+	viewsSetup = require('./utils/viewsSetup.js')
+	spatialView = require('./utils/spatialView.js');
 
 // api modules
 var users = require('./api/users.js');
@@ -10,15 +12,19 @@ var rants = require('./api/rants.js');
 var app = module.exports = express();
 var port = process.env.PORT || 3000;
 
-var couchbaseClient = new couchbase.Connection({
+var connection = new couchbase.Connection({
   'bucket':'ranter',
   'host':'127.0.0.1:8091'
 });
 
+
+viewsSetup.init(connection);
+spatialView.get(connection, 'ranter', '', '');
+
 // all environments
-app.set('couchbaseClient', couchbaseClient);
+app.set('connection', connection);
 app.set('views', __dirname + '/views');
-app.set('view engine', 'jade');
+app.set('view engine', 'ejs');
 app.use('/bootstrap/css', express.static(__dirname + '/bootstrap/css'));
 app.use(express.logger('dev'));
 app.use(express.bodyParser());

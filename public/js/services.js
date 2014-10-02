@@ -7,7 +7,7 @@ mod.service('loginService',function($http,$q){
 			username: username,
 			password: password
 		};
-		return $http.post('/api/login',data);
+		return $http.post('/api/login/',data);
 	}}
 	
 });
@@ -20,7 +20,7 @@ mod.service('registerService',function($http,$q){
             image: image,
 			password: password
 		};
-		return $http.post('/api/register', data);
+		return $http.post('/api/register/', data);
 	}}
         		
 });

@@ -1,0 +1,7 @@
+{ "views": 
+   { 
+   	"rantabouts_by_original_ranter": { 
+   		"map": "function (doc, meta) {\n  if(doc.type == \"rant\" && doc.rantAbout){\n  \temit(doc.rantAbout.userName, 1);\n  }\n}" 
+   		}
+   	} 
+}

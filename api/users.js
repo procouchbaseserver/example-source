@@ -3,12 +3,12 @@ var couchbase = require('couchbase');
 exports.init = function(app){
 
 	// getting the client instance from the application
-	var couchbaseClient = app.get('couchbaseClient');
+	var connection = app.get('connection');
 
 	// the login API
 	app.post('/api/login/', function(req, res){
 		var key = "user-" + req.body.username;
-		couchbaseClient.get(key, getUserCallback);
+		connection.get(key, getUserCallback);
 		console.log(key);
 
 		function getUserCallback(error, result) {
@@ -17,8 +17,8 @@ exports.init = function(app){
 
 			if(error) {
 				if(error.code == couchbase.errors.keyNotFound) {
-					status = 404; // HTTP status: Resource not found.
-					data = {error: "User does not exist."};
+					status = 401; // HTTP status: Unauthorized.
+					data = {error: "Invalid username or password."};
 				}
 				else 
 					status = 500; // HTTP status: Internal Server Error.
@@ -45,6 +45,7 @@ exports.init = function(app){
     // the register API
     app.post('/api/register/', function(req, res) {
 
+    	console.log('register')
     	var user = {
     		type: "user",
     		username: req.body.username,
@@ -55,7 +56,7 @@ exports.init = function(app){
     	};
 
 		// add the new user to the database
-		couchbaseClient.add("user-" + user.username, user, {persist_to: 1, replicate_to: 0}, addUserCallback);
+		connection.add("user-" + user.username, user, {persist_to: 1, replicate_to: 0}, addUserCallback);
 		
 		function addUserCallback(error, result) {
 			console.log(error, result);
@@ -100,7 +101,7 @@ exports.init = function(app){
 		var status = 200; // HTTP status: OK.
 	    console.log(follow, follower);
 
-	    couchbaseClient.touch("user-" + follow, userExistsCallback);
+	    connection.touch("user-" + follow, userExistsCallback);
 
 	    function userExistsCallback(error, result) {
 			if(error) {
@@ -137,7 +138,7 @@ exports.init = function(app){
 		var key = "follow-" + follow;
 		var value = (operation == "follow" ? "+" : "-") + follower;
 
-		couchbaseClient.append(key, value, appendCallback);
+		connection.append(key, value, appendCallback);
 
 		function appendCallback(error, result) {
 
@@ -146,7 +147,7 @@ exports.init = function(app){
 			if( error &&
 			    error.code == couchbase.errors.notStored &&
 				operation == "follow") {
-				   	couchbaseClient.add(key, value, updateFollowerCallback);
+				   	connection.add(key, value, updateFollowerCallback);
 				}
 			else
 				updateFollowerCallback(error, result);

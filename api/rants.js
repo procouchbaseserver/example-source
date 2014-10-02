@@ -7,7 +7,7 @@ var levels = {"yearly":1, "monthly":2, "dayly":3};
 exports.init = function(app){
 
 	// getting the client instance from the application
-	var connection = app.get('couchbaseClient');
+	var connection = app.get('connection');
 	//http://localhost.:3000/api/rants?start=1-19-2014&end=1-20-2014
 	
 	// Retrieve a list of rants on your wall
@@ -62,6 +62,7 @@ exports.init = function(app){
 		rant.date = new Date();
 		rant.rantbacks = uuid.v4();
 
+		console.log(rant);
 		var userKey = "rant-" + rant.userName;
 		var counterKey = userKey + "-count";
 		connection.incr(counterKey, {initial: 1, offset: 1}, incrementCallback);
@@ -76,7 +77,11 @@ exports.init = function(app){
 				var rantKey = userKey + '-' + result.value;
 				var rantbacksKey = rant.rantbacks;
 				documents[rantKey] = { value: rant };
-				documents[rantbacksKey] = { value : [] };
+				documents[rantbacksKey] = { value : { 
+						type: "rantbacks",
+						userName: rant.userName,
+					 	values: [] 
+					 }};
 				connection.setMulti(documents, {}, setMultiCallback);
 			}
 		}
@@ -105,6 +110,7 @@ exports.init = function(app){
 					res.json(500, {}); // HTTP status: Internal Server Error.
 			}
 			else {
+
 				var rantbacksKey = result.value.rantbacks;
 				var rantback = req.body;
 
@@ -171,7 +177,7 @@ exports.init = function(app){
 
 			var cas = result.cas;
 			var rantbacks = result.value;
-			rantbacks.push(rantback);
+			rantbacks.values.push(rantback);
 
 			connection.set(rantbacksKey, rantbacks, {cas: cas}, function (error, result) {
 				if (error) {
@@ -201,7 +207,7 @@ exports.init = function(app){
 
 			var cas = result.cas;
 			var rantbacks = result.value;
-			rantbacks.push(rantback);
+			rantbacks.values.push(rantback);
 
 			connection.set(rantbacksKey, rantbacks, {cas: cas}, function (error, result) {			
 				if (error)

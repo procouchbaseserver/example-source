@@ -12,23 +12,16 @@ angular.module('ranter', [
 config(function ($routeProvider, $locationProvider) {
   $routeProvider.
     when('/', {
-      templateUrl: 'partials/welcome'
-    }).
-    when('/wall', {
-      templateUrl: 'partials/wall',
-      controller: 'WallController'
-    }).
-    when('/timeline', {
-      templateUrl: 'partials/timeline',
-      controller: 'WallController'
+      templateUrl: 'partials/login.html',
+      controller: 'LoginController'
     }).
     when('/register', {
-      templateUrl: 'partials/register',
+      templateUrl: 'partials/register.html',
       controller: 'RegisterController'
     }).
-    when('/about', {
-      templateUrl: 'partials/about',
-      controller: 'AboutController'
+    when('/feed', {
+      templateUrl: 'partials/feed.html',
+      controller: 'FeedController'
     }).
     when('/404', {
       templateUrl: 'partials/404'
