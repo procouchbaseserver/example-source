@@ -1,12 +1,12 @@
 { "views": 
-   { 
+   [{ 
    	"rantabouts_by_original_ranter": { 
    		"map": "function (doc, meta) {\n  if(doc.type == \"rant\" && doc.rantAbout){\n  \temit(doc.rantAbout.userName, 1);\n  }\n}" 
    		}
-   	} 
+   	},
    { 
-   	"rantabouts_by_original_ranter": { 
+   	"by_date": { 
    		"map": "function (doc, meta) {\n if(meta.type == \"json\" && doc.type == \"rant\" && doc.date){\n	\temit(doc.date, null);\n} \n}" 
     	}
-    }
+    }]
 }
