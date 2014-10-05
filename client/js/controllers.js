@@ -59,7 +59,7 @@ angular.module('ranter.controllers', [])
             });
         }
     }).
-    controller('FeedController', function ($scope) {
+    controller('FeedController', function ($scope, $rootScope, $http) {
         var createRant = function () {
             return {
                 userName: $rootScope.user.username,

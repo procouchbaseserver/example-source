@@ -20,7 +20,7 @@ exports.init = function(app){
 		view.query({startkey: startDate, endkey: endDate}, function (error, results){
 			if(error){
 				console.log(error);
-				res.writeHead(500);
+				res.status(500);
 				res.end();
 			} else {
 				getRants(results,res);

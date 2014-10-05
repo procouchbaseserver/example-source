@@ -17,7 +17,8 @@ angular.module('ranter', ['ui.router', 'ranter.controllers', 'ranter.filters', '
             })
             .state('feed', {
                 url: '/feed',
-                templateUrl: 'partials/feed.html'
+                templateUrl: 'partials/feed.html',
+                controller: 'FeedController'
             })
             .state('root', {
                 url: '/',

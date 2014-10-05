@@ -6,7 +6,7 @@ exports.init = function(app){
 	var connection = app.get('connection');
 
 	// the login API
-	app.post('/api/login/', function(req, res){
+	app.post('/api/login', function(req, res){
 		var key = "user-" + req.body.username;
 		connection.get(key, getUserCallback);
 		console.log(key);
@@ -24,7 +24,7 @@ exports.init = function(app){
 					status = 500; // HTTP status: Internal Server Error.
 			} 
 			else {
-				if (result.value.password !== req.body.password) {
+				if (result.value.password !== req.body.passwd) {
 					status = 401; // HTTP status: Unauthorized.
 					data = {error: "Invalid username or password."};
 				} 
